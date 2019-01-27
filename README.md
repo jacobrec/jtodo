@@ -1,5 +1,12 @@
 # jtodo
 A command line based todo app. Designed to be simple, functional, and good looking
+```
+ Todo
+   1. ✔ make a todo list
+   2. ✔ check off an item
+   3. ☐ finish this app 
+```
+It looks like that!
 
 ## Usage
 #### Commands
