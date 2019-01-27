@@ -1,7 +1,6 @@
 #!/usr/bin/sbcl --script
 (load "~/quicklisp/setup.lisp")
 
-
 (defvar *todo-path "~/.jtodolistfiles/")
 (defvar *default-list "Todo")
 
@@ -38,6 +37,8 @@
         ((car (car todo-list)) (list-clear-done (cdr todo-list)))
         (t (cons (car todo-list) (list-clear-done (cdr todo-list))))))
 
+
+
 (defun file-write-list (todo-list)
   "Writes the todo list to a file"
   (if (not todo-list) (return-from file-write-list nil))
@@ -50,6 +51,7 @@
   "Reads the todo list from a file"
   (let ((name (concatenate 'string *todo-path todo-file)))
     (if (probe-file name) (with-open-file (f name) (read f)) (list todo-file))))
+
 
 
 (defun display-todo-header (title)
@@ -72,6 +74,7 @@
 (defun display-all-lists ()
   "Prints all available lists"
   (format t "Listing available lists hasn't be implemented yet~%")
+  ;(let ((files (directory (concatenate 'string *todo-path "**/*")))) (format t files))
   nil)
 
 (defun display-help ()
@@ -83,6 +86,8 @@
   (format t "    -c          Clears all items that are done~%")
   (format t "    -ls         Prints the name of all your lists~%")
   nil)
+
+
 
 (defun program-get-flag (args flag)
   "Gets the value of the flag"
