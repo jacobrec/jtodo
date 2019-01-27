@@ -1,6 +1,3 @@
-#!/usr/bin/sbcl --script
-(load "~/quicklisp/setup.lisp")
-
 (defvar *todo-path "~/.jtodolistfiles/")
 (defvar *default-list "Todo")
 
@@ -145,5 +142,8 @@
            ((eq (car action) 'show)
              (display-todo (file-read-list l)))))))
 
-(program-todo (uiop:command-line-arguments))
+; buildapp --eval '(load "main.lisp")' --entry main --output todo
+; https://www.xach.com/lisp/buildapp/
+(defun main (argv)
+  (program-todo (cdr argv)))
 
