@@ -42,10 +42,12 @@
 (defun file-write-list (todo-list)
   "Writes the todo list to a file"
   (if (not todo-list) (return-from file-write-list nil))
-  (with-open-file (f (concatenate 'string  *todo-path (car todo-list))
-                     :direction :output :if-does-not-exist :create
-                     :if-exists :supersede)
-    (print todo-list f)))
+  (let ((name (concatenate 'string *todo-path (car todo-list))))
+    (with-open-file (f name :direction :output :if-exists :supersede
+                            :if-does-not-exist :create)
+      (print todo-list f))
+    (if (not (cdr todo-list))
+        (delete-file (probe-file name)))))
 
 (defun file-read-list (todo-file)
   "Reads the todo list from a file"
