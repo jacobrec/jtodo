@@ -73,9 +73,13 @@
 
 (defun display-all-lists ()
   "Prints all available lists"
-  (format t "Listing available lists hasn't be implemented yet~%")
-  ;(let ((files (directory (concatenate 'string *todo-path "**/*")))) (format t files))
-  nil)
+  (format t "You have the following todo lists active:~%")
+  (let ((files (directory (concatenate 'string *todo-path "**/*"))))
+    (dolist (item files)
+      (format t "  • ~a~%"
+              (subseq (namestring item)
+              (length (namestring (car (directory *todo-path))))))))
+  nil) ; important this returns nil, so it doesn't try and write later
 
 (defun display-help ()
   "Prints all option"
@@ -85,7 +89,7 @@
   (format t "    -t NUM      Toggles the item with the index NUM~%")
   (format t "    -c          Clears all items that are done~%")
   (format t "    -ls         Prints the name of all your lists~%")
-  nil)
+  nil) ; important this returns nil, so it doesn't try and write later
 
 
 
