@@ -8,9 +8,9 @@
 (defun list-remove (todo-list index)
   "Removes the item at the index and returns it"
   (labels ((inner-remove (l i)
-     (cond ((= 0 i) (cdr l))
-        ((not l) l)
-        (t (cons (car l) (inner-remove (cdr l) (1- i)))))))
+                         (cond ((= 0 i) (cdr l))
+                               ((not l) l)
+                               (t (cons (car l) (inner-remove (cdr l) (1- i)))))))
     (inner-remove todo-list index)))
 
 (defun list-toggle-item (item)
@@ -21,15 +21,15 @@
   "Toggles the item at the index and returns it"
   (if (< index 1) (return-from list-toggle todo-list))
   (labels ((inner-toggle (l i)
-             (cond ((= 0 i) (cons (list-toggle-item (car l)) (cdr l)))
-                   ((not l) l)
-                   (t (cons (car l) (inner-toggle (cdr l) (1- i)))))))
+                         (cond ((= 0 i) (cons (list-toggle-item (car l)) (cdr l)))
+                               ((not l) l)
+                               (t (cons (car l) (inner-toggle (cdr l) (1- i)))))))
     (inner-toggle todo-list index)))
 
 (defun list-clear-done (todo-list)
   "Removes all items that are done from the list"
   (cond ((stringp (car todo-list))
-                  (cons (car todo-list) (list-clear-done (cdr todo-list))))
+         (cons (car todo-list) (list-clear-done (cdr todo-list))))
         ((not todo-list) todo-list)
         ((car (car todo-list)) (list-clear-done (cdr todo-list)))
         (t (cons (car todo-list) (list-clear-done (cdr todo-list))))))
@@ -41,10 +41,10 @@
   (if (not todo-list) (return-from file-write-list nil))
   (let ((name (concatenate 'string *todo-path (car todo-list))))
     (with-open-file (f name :direction :output :if-exists :supersede
-                            :if-does-not-exist :create)
+                       :if-does-not-exist :create)
       (print todo-list f))
     (if (not (cdr todo-list))
-        (delete-file (probe-file name)))))
+      (delete-file (probe-file name)))))
 
 (defun file-read-list (todo-file)
   "Reads the todo list from a file"
@@ -59,7 +59,7 @@
 
 (defun display-todo-item (item index)
   "Displays an item with formatting"
-  (format t "   ~A. ~A ~A~%"  index (if (car item) "✔" "☐") (car (cdr item))))
+  (format t "   ~A. ~A ~A~%"  index (if (car item) "✓" "☐") (car (cdr item))))
 
 (defun  display-todo (todo-list)
   "Pretty prints a todo list"
@@ -77,7 +77,7 @@
     (dolist (item files)
       (format t "  • ~a~%"
               (subseq (namestring item)
-              (length (namestring (car (directory *todo-path))))))))
+                      (length (namestring (car (directory *todo-path))))))))
   nil) ; important this returns nil, so it doesn't try and write later
 
 (defun display-help ()
@@ -129,17 +129,17 @@
   (let ((l (program-get-list args))
         (action (program-get-action args)))
     (file-write-list
-     (cond ((eq (car action) 'clear) (list-clear-done (file-read-list l)))
-           ((eq (car action) 'lists) (display-all-lists))
-           ((eq (car action) 'help) (display-help))
-           ((eq (car action) 'toggle)
+      (cond ((eq (car action) 'clear) (list-clear-done (file-read-list l)))
+            ((eq (car action) 'lists) (display-all-lists))
+            ((eq (car action) 'help) (display-help))
+            ((eq (car action) 'toggle)
              (list-toggle (file-read-list l) (parse-integer (car (cdr action)))))
-           ((eq (car action) 'remove)
+            ((eq (car action) 'remove)
              (list-remove (file-read-list l) (parse-integer (car (cdr action)))))
-           ((eq (car action) 'add)
-            (list-add (file-read-list l)
-                      (program-combine-args (car (cdr action)))))
-           ((eq (car action) 'show)
+            ((eq (car action) 'add)
+             (list-add (file-read-list l)
+                       (program-combine-args (car (cdr action)))))
+            ((eq (car action) 'show)
              (display-todo (file-read-list l)))))))
 
 ; buildapp --eval '(load "main.lisp")' --entry main --output todo
