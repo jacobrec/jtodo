@@ -60,10 +60,14 @@
 (defun display-todo-header (title)
   "Displays the title with an underline"
   (format t " ~a[1;4m~A~a[0m~%" #\escape title #\escape))
-
+(defun with-color-fg (txt color)
+  (format nil "~a[3~am~A~a[0m" #\escape color txt #\escape))
 (defun display-todo-item (item index)
   "Displays an item with formatting"
-  (format t "   ~A. ~A ~A~%"  index (if (car item) "✓" "☐") (car (cdr item))))
+  (format t "   ~A. ~A ~A~%"
+          index
+          (if (car item) (with-color-fg "✓" 2) "☐")
+          (car (cdr item))))
 
 (defun  display-todo (todo-list)
   "Pretty prints a todo list"
