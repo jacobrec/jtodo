@@ -1,4 +1,4 @@
-todo:
+todo: main.lisp
 	buildapp --eval '(load "main.lisp")' --entry main --output todo
 	chmod +x todo
 

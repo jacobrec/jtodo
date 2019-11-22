@@ -34,6 +34,10 @@
         ((car (car todo-list)) (list-clear-done (cdr todo-list)))
         (t (cons (car todo-list) (list-clear-done (cdr todo-list))))))
 
+(defun list-count (todo-list)
+  "Counts how many items are in a list"
+  (format t "~a~%" (length todo-list))
+  todo-list)
 
 
 (defun file-write-list (todo-list)
@@ -88,6 +92,8 @@
   (format t "    -t NUM      Toggles the item with the index NUM~%")
   (format t "    -c          Clears all items that are done~%")
   (format t "    -ls         Prints the name of all your lists~%")
+  (format t "    -count      Counts the number of items in the list~%")
+  (format t "    -clear      Clears all items in the list~%")
   nil) ; important this returns nil, so it doesn't try and write later
 
 
@@ -121,6 +127,8 @@
         ((program-get-flag args "-c") (list 'clear))
         ((program-get-flag args "-ls") (list 'lists))
         ((program-get-flag args "-h") (list 'help))
+        ((program-get-flag args "-count") (list 'length))
+        ((program-get-flag args "-clear") (list 'forceclear))
         ((not (program-remove-flags args)) (list 'show))
         (t (list 'add (program-remove-flags args)))))
 
@@ -131,7 +139,10 @@
     (file-write-list
       (cond ((eq (car action) 'clear) (list-clear-done (file-read-list l)))
             ((eq (car action) 'lists) (display-all-lists))
+            ((eq (car action) 'forceclear) (list (car (file-read-list l))))
             ((eq (car action) 'help) (display-help))
+            ((eq (car action) 'length)
+             (list-count (file-read-list l)))
             ((eq (car action) 'toggle)
              (list-toggle (file-read-list l) (parse-integer (car (cdr action)))))
             ((eq (car action) 'remove)
